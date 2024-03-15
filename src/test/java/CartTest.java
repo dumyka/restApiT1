@@ -15,6 +15,8 @@ public class CartTest {
     CartModel data = new CartModel();
 
     private static String token;
+    private static int productId = 1;
+    private static int quantity = 11;
 
     @BeforeAll
     public static void beforeAll() {
@@ -27,6 +29,14 @@ public class CartTest {
                 .post("/login")
                 .then().assertThat().statusCode(200)
                 .extract().body().jsonPath().getString("access_token");
+
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .accept(ContentType.JSON)
+                .header("Authorization", "Bearer " + token)
+                .body("{\"product_id\": " + productId + ", \"quantity\": " + quantity + "}")
+                .post("/cart")
+                .then().assertThat().statusCode(201);
     }
 
     @Test
@@ -36,7 +46,7 @@ public class CartTest {
                 .accept(ContentType.JSON)
                 .header("Authorization", "Bearer " + token)
                 .get("/cart");
-        response.then().statusCode(404);
+        response.then().statusCode(200);
     }
 
     @Test
