@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import response.CartResponse;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -45,6 +46,7 @@ public class CartTest {
                 .header("Authorization", "Bearer " + token)
                 .get(CART_ENDPOINT);
         response.then().statusCode(200);
+        response.getBody().as(CartResponse.class);
     }
 
     @Test

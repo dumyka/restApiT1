@@ -1,5 +1,6 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,4 +12,6 @@ public class ProductModel {
     private String category;
     private double price;
     private int discount;
+    @JsonIgnore
+    private int quantity;
 }
