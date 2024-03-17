@@ -1,3 +1,5 @@
+package tests;
+
 import com.github.javafaker.Faker;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
@@ -5,6 +7,7 @@ import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -21,6 +24,7 @@ public class UserTests {
     }
 
     @Test
+    @Tag("Positive")
     public void registerTest() {
         String username = faker.name().username();
         String password = faker.internet().password();
@@ -36,6 +40,7 @@ public class UserTests {
     }
 
     @Test
+    @Tag("Positive")
     public void loginTest() {
         Response response = RestAssured.given()
                 .contentType(ContentType.JSON)

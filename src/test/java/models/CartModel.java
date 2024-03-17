@@ -1,10 +1,14 @@
 package models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
+@AllArgsConstructor
 public class CartModel {
 
-    private int product_id;
+    @JsonProperty("product_id")
+    private Integer productId;
     private int quantity;
 }
