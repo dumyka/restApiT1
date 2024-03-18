@@ -67,6 +67,71 @@ public class ProductsTest {
     }
 
     @Test
+    @Tag("Negative")
+    @DisplayName("Создание товара c пустым именем")
+    public void createProductWithEmptyFieldNameTest() {
+        data.setName(" ");
+        data.setCategory("Shoes");
+        data.setPrice(15.99);
+        data.setDiscount(3);
+        RestAssured.given()
+                .body(data)
+                .post(PRODUCT_ENDPOINT)
+                .then().assertThat().statusCode(400);
+    }
+
+    @Test
+    @Tag("Negative")
+    @DisplayName("Создание товара без обязательного поля 'name'")
+    public void createProductWithOnlyFieldNameTest() {
+        data.setCategory("Shoes");
+        data.setPrice(15.99);
+        data.setDiscount(3);
+        RestAssured.given()
+                .body(data)
+                .post(PRODUCT_ENDPOINT)
+                .then().assertThat().statusCode(400);
+    }
+
+    @Test
+    @Tag("Negative")
+    @DisplayName("Создание товара только с полем 'name'")
+    public void createProductWithoutRequiredFieldTest() {
+        data.setName("Hoka One One");
+        RestAssured.given()
+                .body(data)
+                .post(PRODUCT_ENDPOINT)
+                .then().assertThat().statusCode(400);
+    }
+
+    @Test
+    @Tag("Negative")
+    @DisplayName("Создание товара без поля 'price'")
+    public void createProductWithoutPriceFieldTest() {
+        data.setName("Hoka One One");
+        data.setCategory("Shoes");
+        data.setDiscount(3);
+        RestAssured.given()
+                .body(data)
+                .post(PRODUCT_ENDPOINT)
+                .then().assertThat().statusCode(400);
+    }
+
+    @Test
+    @Tag("Negative")
+    @DisplayName("Создание товара с пустым полем 'price'")
+    public void createProductWithoutEmptyFieldPriceTest() {
+        data.setName("Hoka One One");
+        data.setCategory("Shoes");
+        data.setPrice(null);
+        data.setDiscount(3);
+        RestAssured.given()
+                .body(data)
+                .post(PRODUCT_ENDPOINT)
+                .then().assertThat().statusCode(400);
+    }
+
+    @Test
     @Tag("Positive")
     @DisplayName("Получение информации о товаре по id")
     public void secondProductsGetTest() {
@@ -108,12 +173,61 @@ public class ProductsTest {
     }
 
     @Test
+    @Tag("Negative")
+    @DisplayName("Частичное обновление товара методом put")
+    public void partialUpdateProductTest() {
+        data.setName("Update Hoka One One");
+        data.setDiscount(3);
+        RestAssured.given()
+                .body(data)
+                .put(PRODUCT_ENDPOINT + "/2")
+                .then().assertThat().statusCode(400);
+    }
+
+    @Test
+    @Tag("Negative")
+    @DisplayName("Обновление не существующего товара")
+    public void updateNonExistentProductTest() {
+        data.setName("Update Hoka One One");
+        data.setCategory("Running shoes");
+        data.setPrice(19.99);
+        data.setDiscount(3);
+        RestAssured.given()
+                .body(data)
+                .put(PRODUCT_ENDPOINT + "/3444")
+                .then().assertThat().statusCode(404);
+    }
+
+    @Test
+    @Tag("Negative")
+    @DisplayName("Обновление товара без указания цены")
+    public void updateProductWithoutPriceTest() {
+        data.setName("Update Hoka One One");
+        data.setCategory("Running shoes");
+        data.setPrice(null);
+        data.setDiscount(3);
+        RestAssured.given()
+                .body(data)
+                .put(PRODUCT_ENDPOINT + "/2")
+                .then().assertThat().statusCode(400);
+    }
+
+    @Test
     @Tag("Positive")
     @DisplayName("Удаление товара")
     public void productsDeleteTest() {
         RestAssured.given()
                 .delete(PRODUCT_ENDPOINT + "/4")
                 .then().assertThat().statusCode(200);
+    }
+
+    @Test
+    @Tag("Negative")
+    @DisplayName("Удаление не существующего товара ")
+    public void deleteNonExistentProductTest() {
+        RestAssured.given()
+                .delete(PRODUCT_ENDPOINT + "/400")
+                .then().assertThat().statusCode(400);
     }
 
 

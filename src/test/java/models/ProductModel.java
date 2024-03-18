@@ -10,7 +10,7 @@ public class ProductModel {
     private int id;
     private String name;
     private String category;
-    private double price;
+    private Double price;
     private int discount;
     @JsonIgnore
     private int quantity;
