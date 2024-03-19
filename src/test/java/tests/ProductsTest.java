@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import static io.restassured.RestAssured.when;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ProductsTest {
@@ -142,13 +143,16 @@ public class ProductsTest {
     public void secondProductsGetTest() {
         Response response = RestAssured.given()
                 .get(PRODUCT_ENDPOINT + "/4");
-
         response.then().assertThat().statusCode(200);
-        Assertions.assertEquals("Clothing", response.jsonPath().getString("[0].category"));
-        Assertions.assertEquals("Levis Jeans", response.jsonPath().getString("[0].name"));
-        Assertions.assertEquals(15.0, response.jsonPath().getDouble("[0].discount"));
-        Assertions.assertEquals(12.99, response.jsonPath().getDouble("[0].price"));
-        Assertions.assertEquals(4, response.jsonPath().getInt("[0].id"));
+
+        List<ProductModel> products = response.then().extract().as(new ObjectMapper().getTypeFactory().constructCollectionType(List.class, ProductModel.class));
+        Assertions.assertNotNull(products);
+        ProductModel product = products.get(0);
+        Assertions.assertEquals("Clothing", product.getCategory());
+        Assertions.assertEquals("Levis Jeans", product.getName());
+        Assertions.assertEquals(15.0, product.getDiscount());
+        Assertions.assertEquals(12.99, product.getPrice());
+        Assertions.assertEquals(4, product.getId());
     }
 
     @Test
@@ -224,6 +228,9 @@ public class ProductsTest {
         RestAssured.given()
                 .delete(PRODUCT_ENDPOINT + "/4")
                 .then().assertThat().statusCode(200);
+        when()
+                .get(PRODUCT_ENDPOINT + "/4")
+                .then().assertThat().statusCode(404);
     }
 
     @Test
