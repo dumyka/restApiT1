@@ -60,10 +60,15 @@ public class ProductsTest {
         data.setCategory("Shoes");
         data.setPrice(15.99);
         data.setDiscount(3);
-        RestAssured.given()
+        Response response = RestAssured.given()
                 .body(data)
-                .post(PRODUCT_ENDPOINT)
-                .then().assertThat().statusCode(201);
+                .post(PRODUCT_ENDPOINT);
+        response.then().assertThat().statusCode(201);
+        ProductModel product = response.getBody().as(ProductModel.class);
+        Assertions.assertEquals("Hoka One One", product.getName());
+        Assertions.assertEquals("Shoes", product.getCategory());
+        Assertions.assertEquals(15.99, product.getPrice());
+        Assertions.assertEquals(3, product.getDiscount());
     }
 
     @Test

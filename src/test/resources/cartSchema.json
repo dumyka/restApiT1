@@ -1,0 +1,13 @@
+{
+  "cart": [
+    {
+      "id": 1,
+      "name": "HP Pavilion Laptop",
+      "category": "Electronics",
+      "price": 10.99,
+      "discount": 10
+    }
+  ],
+  "total_price": 21.98,
+  "total_discount": 2.2
+}

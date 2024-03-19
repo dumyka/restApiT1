@@ -6,13 +6,15 @@ import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
+import io.restassured.module.jsv.JsonSchemaValidator;
 import io.restassured.response.Response;
 import models.CartModel;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import response.CartResponse;
+
+import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -26,6 +28,7 @@ public class CartTest {
     private static String password = "dima123";
     private static String CART_ENDPOINT = "/cart";
 
+    private static final String PATH = "src/test/resources";
 
     @BeforeAll
     public static void beforeAll() {
@@ -46,7 +49,7 @@ public class CartTest {
                 .header("Authorization", "Bearer " + token)
                 .get(CART_ENDPOINT);
         response.then().statusCode(200);
-        response.getBody().as(CartResponse.class);
+        response.then().assertThat().body(JsonSchemaValidator.matchesJsonSchema(new File(PATH + "/cartSchema.json")));
     }
 
     @Test
